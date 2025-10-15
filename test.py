@@ -28,18 +28,7 @@ predictions, targets = [], []
 with torch.no_grad():
     for batch in testloader:
         batch = batch.to(device)
-        # for mol_id in batch.batch.unique():
-        #     mol_mask = (batch.batch == mol_id)
-        #     z_mol = batch.z[mol_mask]
-        #     # molecules_z.append(z_mol)
-        #     pos = batch.pos[batch.batch == mol_id]
-        #     dist = torch.cdist(pos, pos)
-        #     e = batch.y[mol_id, 7]
-            
-        #     pred = model(z_mol, dist)
-
-        #     predictions.append(pred.cpu())
-        #     targets.append(e.cpu())
+        
         zbatch, dist, target = prepbatch(batch, numatoms, device)
 
         pred = model(zbatch, dist)

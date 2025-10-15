@@ -46,14 +46,10 @@ def getQM9data():
     # subdataset = [data for data in dataset if data.z.size(0) <= 10]
     # print('subdataset: ', len(subdataset))
     # torch.save(subdataset, './Data/QM9/processed/miniQM9.pt')
-    # exit()
 
     subdataset = MiniQM9(root="Data/QM9")
-    print('subdataset[0]-y: ', subdataset[0].y.shape)
 
-    # subdataset = normalize(subdataset)
     print('subdataset: ', len(subdataset))
-    # print('y: ', subdataset[0].y[:, 7])
 
     traindata, tempdata = train_test_split(subdataset, test_size=0.2, train_size=0.8, random_state=42)
     testdata, valdata = train_test_split(tempdata, test_size=0.5, train_size=0.5, random_state=42)
@@ -78,9 +74,9 @@ def getQM7bdata():
     print(len(train), len(valid), len(test))
 
 
-# getQM7bdata()
-# trainloader, _, _ = getQM9data()
+if __name__ == '__main__':
+    # getQM7bdata()
+    trainloader, _, _ = getQM9data()
 
-# for t in trainloader:
-#     print('U0: ', t.y[:,7])
-#     exit()
+    # for t in trainloader:
+    #     print('U0: ', t.y[:,7])

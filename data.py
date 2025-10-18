@@ -32,24 +32,30 @@ def getQM9data():
     # Data
     import torch
     from torch_geometric.datasets import QM9
+
+    if not os.path.exists('./Data'):
+        os.makedirs('./Data')
+    dataset = QM9(root="Data/QM9")
+    dataset = dataset.shuffle()
+
+    subdataset = []
+    for i, data in enumerate(dataset):
+        if data.num_nodes <= 10:
+            subdataset.append(data)
+
+    subdataset = [data for data in dataset if data.z.size(0) <= 10]
+    print('subdataset: ', len(subdataset))
+    torch.save(subdataset, './Data/QM9/processed/miniQM9.pt')
+
+
+def getminiQM9():
+
     from torch_geometric.loader import DataLoader
     from sklearn.model_selection import train_test_split
 
-    # dataset = QM9(root="Data/QM9")
-    # dataset = dataset.shuffle()
-
-    # subdataset = []
-    # for i, data in enumerate(dataset):
-    #     if data.num_nodes <= 10:
-    #         subdataset.append(data)
-
-    # subdataset = [data for data in dataset if data.z.size(0) <= 10]
-    # print('subdataset: ', len(subdataset))
-    # torch.save(subdataset, './Data/QM9/processed/miniQM9.pt')
-
     subdataset = MiniQM9(root="Data/QM9")
 
-    print('subdataset: ', len(subdataset))
+    print('Data Loaded Size: ', len(subdataset))
 
     traindata, tempdata = train_test_split(subdataset, test_size=0.2, train_size=0.8, random_state=42)
     testdata, valdata = train_test_split(tempdata, test_size=0.5, train_size=0.5, random_state=42)
@@ -75,8 +81,4 @@ def getQM7bdata():
 
 
 if __name__ == '__main__':
-    # getQM7bdata()
-    trainloader, _, _ = getQM9data()
-
-    # for t in trainloader:
-    #     print('U0: ', t.y[:,7])
+    getQM9data()
